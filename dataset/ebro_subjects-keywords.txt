@@ -1,0 +1,141 @@
+firemen Bomberos
+    bomberos
+    bomberosforestales
+    BomberosGuada
+    bomberosolidarios
+    BomberosSpain
+
+civil-guard Guardia Civil
+    guardia\s*civil
+
+civil-protection Protección Civil
+    protecci.n\s*civil
+    
+police Policía
+    polic.as?
+    policia092logro
+    PoliciaAmposta
+    policiaforalnav
+    policial
+    UAPO
+    
+ume Unidad Militar de Emergencias, BIEM, Ejército, @umegob
+    Ejercito\s*Espa.ol\s*UME
+    UMEgob\s*#BIEM1\s*#BIEM3\s*#BIEM4
+    UMEgob:\s*#BIEM1\s*y\s*#BIEM4
+    UMEgob\s*#BIEM5
+    UMEgob:\s*del\s*#BIEM3\s*#BIEM4\s*#BIEM1
+    UME\s*Unidad\s*Militar\s*de\s*Emergencias
+    Unidad\s*Militar\s*de\s*Emergencias\s*\(#UME\)
+    ume
+    umegob
+    BIEM1\s*#BIEM3\s*#BIEM4
+    BIEM1\s*#BIEM4
+    BIEM1\s*y\s*#BIEM4
+    biem1
+    biem2
+    biem3
+    biem4
+    biem5
+    biem
+    unidad\s*militar\s*de\s*emergencias
+    Ejercito\s*Espa.ol\s*UME
+    ejercito_tierra
+    ej.rcito
+
+red-cross Cruz Roja
+    cruz_roja
+    cruz\s*roja
+    CruzRojaEsp
+    CruzRojaZgz
+    CruzRojaNavarra
+    cruzroja_alava
+    cruzrojahuesca
+
+che Confederación Hidrográfica del Ebro, CHE, @ch_ebro
+    Confeder.\s*Hidrogr.fica
+    Conf\s*hidrogr.fica
+    Confs.\s*Hidrogr.ficas
+    CHE\s*\(Confederaci.n\s*Hidrogr.fica\)
+    CHE\(Confederaci.n\s*Hidrografica\s*del\s*Ebro\)
+    CHE\s*\(Conferencia\s*Hidrogr.fica\s*del\s*Ebro\)
+    Confederaci.n\s*Hidrogr.fica\s*del\s*Ebro\s*\(CHE\)
+    Confederaci.n\s*Hidrogr.fica\s*del\s*Ebro\s*@CH_Ebro
+    CHEculpable
+    admones\s*hidrogr.ficas
+    Confederaciones\s*Hidrogr.ficas\s*del\s*Ebro
+    Confederaciones\s*Hidrogr.ficas
+    confederaci.n\s*hidrogr.fica\s*del\s*ebro
+    confederaci.n\s*hidrogr.fica
+    conf\.?\s*hidrogr.fica\s*del\s*ebro
+    conferencia\s*hidrogr.fica\s*del\s*ebro
+    conferencia\s*hidrogr.fica
+    hidrogr.fica\s*del\s*ebro
+    chebro
+    che
+    ch_ebro
+    gesti.n\s*hidrogr.fica
+
+rudi Luisa Fernanda Rudi, Presidenta del Gobierno de Aragón, @lf_rudi
+    Luisa\s*Fernanda\s*Rudi\s*la\s*presidenta\s*de\s*Arag.n
+    La\s*presidenta\s*de\s*Arag.n,\s*Rudi,
+    presidenta\s*de\s*Arag.n,\s*@LFRudi\s*,
+    luisa\s*fernanda\s*rudi
+    rudi
+    rudimento
+    lf_rudi
+    lfrudi
+    presidenta\s*de\s*arag.n
+    
+aragonese-government Gobierno de Aragón, DGA, Consejería de Agricultura, Modesto Lobón
+    dga
+    gobierno_aragon
+    gobierno\s*de\s*arag.n
+    gobierno\s*aragon.es
+    consejero\s*de\s*agricultura
+    consejer.a\s*de\s*agricultura
+    lobondimision
+    modesto\s*lob.n
+    lob.n
+    gobiernos\s*auton.micos\s*y\s*central
+    gobiernos\s*d\s*Espa.a\s*y\s*Arag.n
+    gobierno\s*auton.mico
+    
+rajoy Mariano Rajoy, Presidente del Gobierno de España, @marianorajoy
+    El\s*presidente\s*del\s*Gobierno,\s*Mariano\s*Rajoy
+    MarianoRAJOYs
+    mariano\s*rajoy\s*brey
+    mariano\s*rajoy
+    rajoy
+    presidente\s*del\s*gobierno
+    RajoyAdondelellevan
+    RajoyDimision
+    Rajoyete
+    RajoyNoPisaElBarro
+
+tejerina Isabel García Tejerina, Ministra de Agricultura, Alimentación y Medio Ambiente
+    ministra\s*de\s*Medio\s*Ambiente\s*sra\s*Tejerina
+    ISABEL\s*GARC.A\s*TEJERINA,\s*Ministra\s*de\s*Agricultura
+    La\s*Ministra\s*de\s*Agricultura,\s*Isabel\s*Garc.a\s*Tejerina,
+    isabel\s*garc.a\s*tejerina
+    garc.a\s*tejerina
+    ministra\s*tejerina
+    tejerina
+    ministra\s*de\s*medio\s*ambiente
+    ministra\s*de\s*agricultura
+
+spanish-government Gobierno de España, gobierno central, Ministerio de Agricultura
+    Gob.Central
+    gobiernoPP
+    Gobiernos
+    magramagob
+    ministerio\s*de\s*agricultura
+    ministerio\s*de\s*medio\s*ambiente
+    gobierno\s*nacional
+    gobierno\s*de\s*espa.a
+    gobierno\s*central
+    gobierno\s*espa.ol
+    gobierno
+    gobiernos\s*d\s*Espa.a\s*y\s*Arag.n
+    GOBIERNOS\s*SOCIALISTAS
+

@@ -1,0 +1,51 @@
+obama Barack Obama
+    barack\s*obama
+    obama
+    potus
+    president
+
+romney Mitt Romney
+    mitt\s*romney
+    romney
+
+national-guard National Guard
+    national\s*guard
+    nat'?l\s*guard
+    nat\s*guard
+
+red-cross Red Cross
+    red\s*cross
+
+army-corps Army Corps of Engineers
+    army\s*corps\s*of\s*engineers
+    corps\s*of\s*engineers
+    army\s*engineers
+
+rick-scott Rick Scott, governor of Florida
+    rick\s*scott
+    governor\s*scott
+    gov\s*scott
+    florida\s*governor
+    scott
+
+bobby-jindal Bobby Jindal, governor of Louisiana
+    bobby\s*jindal
+    governor\s*jindal
+    gov\s*jindal
+    lousiana\s*governor
+    jindal
+
+phyl-bryant Phil Bryant, governor of Mississippi
+    phyl\s*bryant
+    governor\s*bryant
+    gov\s*bryant
+    mississippi\s*governor
+    bryant
+
+robert-bentley Robert Bentley, governor of Alabama
+    robert\s*bentley
+    governor\s*bentley
+    gov\s*bentley
+    alabama\s*governor
+    bentley
+
