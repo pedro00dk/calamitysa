@@ -49,7 +49,7 @@ def build_instance(words, vocabulary):
 
 def test():
     '''
-    Tests the current file methods.
+    Tests the current file elements.
     '''
     print(f'testing {__file__}')
     tweets = [
