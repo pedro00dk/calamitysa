@@ -6,9 +6,9 @@ from tweet_collector import *
 
 
 def collect_event_tweets(since, until, results_per_day=1000, location=None, location_radius=None,
-                         verbose=False):
+on_some_collected=None, verbose=False):
     """
-    Helps the tweet collect by getting then per day in a received time interval.
+    Helps the tweet collect by getting they per day in a received time interval.
     """
     if verbose:
         print('collecting tweets of event per day')
@@ -29,8 +29,16 @@ def collect_event_tweets(since, until, results_per_day=1000, location=None, loca
             since=str(current_date),
             until=str(next_date))
 
-        current_day_tweets = TweetAdvancedQuery().query(args, verbose=verbose)
+        try:
+            current_day_tweets = TweetAdvancedQuery().query(args, verbose=verbose)
+        except ConnectionError as e:
+            print(e)
+            print(f'error while collecting tweets of day {current_date}')
+            continue
+
         tweets.extend(current_day_tweets)
+        if on_some_collected is not None:
+            on_some_collected(tweets)
 
         current_date = next_date
 
