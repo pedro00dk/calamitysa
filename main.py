@@ -1,22 +1,24 @@
-from tweet_collector import collect_tweet_by_ids
+import csv
+import os
 
-dataset_folder = 'dataset'
-datasets_format = 'csv'
-datasets = [
-    'aurora_overall', 'aurora_targeted',
-    'ebro_overall', 'ebro_targeted',
-    'isaac_overall', 'isaac_targeted']
+from event_collector import collect_event_tweets
 
-tweets_folder ='tweets'
-for dataset in datasets:
-    tweets_ids = []
-    with open(f'{dataset_folder}/{dataset}.{datasets_format}') as table:
-        table.readline()
-        for line in table:
-            tweets_ids.append(line.split(',')[1])
-    tweets_ids = [*{*tweets_ids}]
-    tweets = collect_tweet_by_ids('consumer_access_keys.txt', tweets_ids, verbose=True)
-    with open(f'{tweets_folder}/{dataset}.txt', 'w', encoding='utf-8') as texts:
-        for index, tweet in enumerate(tweets):
 
-            texts.write(f'{index}:\n{tweet.text}\n\n')
+DATABASE_PATH = './database/'
+
+
+def collect_save_tweets(filename, since, until, results_per_day, location, location_radius):
+    """
+    Collects and saves tweets in a csv file
+    """
+    aurora_tweets = collect_event_tweets(since, until, results_per_day, location, location_radius, verbose=True)
+
+    if not os.path.exists(DATABASE_PATH):
+        os.makedirs(DATABASE_PATH)
+    with open(DATABASE_PATH + filename, 'w', newline='') as table:
+        spamwriter = csv.writer(table, delimiter=';')
+        for tweet in aurora_tweets:
+            spamwriter.writerow([str(tweet.date), tweet.text.replace(';', ',')])
+
+
+collect_save_tweets('aurora.csv', '2012-07-19', '2012-08-19', 5, 'Denver, CO', location_radius=200)
