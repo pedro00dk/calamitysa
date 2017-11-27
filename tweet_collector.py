@@ -1,12 +1,27 @@
-import urllib.request, urllib.error, urllib.parse, json, re, datetime, sys, http.cookiejar
+import datetime
+import json
+import re
+import sys
+import urllib.request
+import urllib.error
+import urllib.parse
+import http.cookiejar
+
 from pyquery import PyQuery
 
 
 class Tweet:
+    """
+    Holds tweet information.
+    """
     pass
 
 
 class QueryArgs:
+    """
+    Twitter advanced search arguments.
+    """
+
     def __init__(self, results=1, query=None, username=None, location=None, location_radius=None, since=None,
                  until=None, lang=None, top_tweets=None):
         self.results = results
@@ -21,10 +36,15 @@ class QueryArgs:
 
 
 class TweetAdvancedQuery:
+    """
+    Runs the search using http and json to recover the tweet information.
+    """
 
     @staticmethod
     def query(args, proxy=None, verbose=False):
-
+        """
+        Runs the query with the received args and returns the collected tweets.
+        """
         if verbose:
             print('Start collect')
 
@@ -35,20 +55,17 @@ class TweetAdvancedQuery:
 
         while active:
             json = TweetAdvancedQuery._get_json_reponse(args, refresh_cursor, cookie_jar, proxy)
-
             if len(json['items_html'].strip()) == 0:
                 break
 
             refresh_cursor = json['min_position']            
             tweets = PyQuery(json['items_html'])('div.js-stream-tweet')
-            
             if len(tweets) == 0:
                 break
-            
+
             for tweet_html in tweets:
                 tweet_pq = PyQuery(tweet_html)
                 tweet = Tweet()
-                
                 tweet_username = tweet_pq('span.username.js-action-profile-name b').text()
                 tweet_text = re.sub(r'\s+', ' ', tweet_pq('p.js-tweet-text').text().replace('# ', '#').replace('@ ', '@'))
                 retweets = int(tweet_pq('span.ProfileTweet-action--retweet span.ProfileTweet-actionCount').attr('data-tweet-stat-count').replace(',', ''))
@@ -57,17 +74,14 @@ class TweetAdvancedQuery:
                 tweet_id = tweet_pq.attr('data-tweet-tweet_id')
                 permalink = tweet_pq.attr('data-permalink-path')
                 tweet_user_id = int(tweet_pq('a.js-user-profile-link').attr('data-user-id'))
-
                 geo_span = tweet_pq('span.Tweet-geo')
                 geo = geo_span.attr('title') if len(geo_span) > 0 else ''
-
                 urls = []
                 for link in tweet_pq('a'):
                     try:
                         urls.append((link.attrib['data-expanded-url']))
                     except KeyError:
                         pass
-
                 tweet.tweet_id = tweet_id
                 tweet.permalink = f'https://twitter.com{permalink}'
                 tweet.username = tweet_username
@@ -81,12 +95,11 @@ class TweetAdvancedQuery:
                 tweet.geo = geo
                 tweet.urls = ','.join(urls)
                 tweet.user_id = tweet_user_id
-
                 results.append(tweet)
 
                 if args.results > 0 and len(results) >= args.results:
                     active = False
-                    break    
+                    break
 
             if verbose:
                 print(f'collected {len(results)} tweets')
@@ -95,30 +108,25 @@ class TweetAdvancedQuery:
 
     @staticmethod
     def _get_json_reponse(args, refresh_cursor, cookie_jar, proxy):
-        url = 'https://twitter.com/i/search/timeline?f=tweets&q=%s&src=typd&%smax_position=%s'
-        
+        """
+        Collects the twitter query response.
+        """
         url_get_data = ''
         if args.username is not None:
             url_get_data += f' from:{args.username}'
-
         if args.since is not None:
             url_get_data += f' since:{args.since}'
-
         if args.until is not None:
             url_get_data += f' until:{args.until}'
-
         if args.location is not None:
             url_get_data += f' near:{args.location}'
             if args.location_radius is not None:
                 url_get_data += f' within:{args.location_radius}mi'
-
         if args.query is not None:
             url_get_data += f' {args.query}'
+        url_lang = f'lang={args.lang}&' if args.lang  is not None else ''
 
-        if args.lang  is not None:
-            url_lang = f'lang={args.lang}&'
-        else:
-            url_lang = ''
+        url = 'https://twitter.com/i/search/timeline?f=tweets&q=%s&src=typd&%smax_position=%s'
         url = url % (urllib.parse.quote(url_get_data), url_lang, refresh_cursor)
 
         headers = [

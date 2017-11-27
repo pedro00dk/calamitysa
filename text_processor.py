@@ -1,8 +1,6 @@
-from typing import List
-
-import re
 import csv
 import nltk
+import re
 
 
 RE_NUMBERS = re.compile(r'[0-9]+')
@@ -21,7 +19,6 @@ def clean_text(text):
     text = RE_NUMBERS.sub(' NUM ', text)
     text = RE_NOT_LETTERS.sub(' ', text)
     text = RE_SPACES.sub(' ', text)
-
     words = text.lower().strip().split(' ')
     words = [STEMMER.stem(word) for word in words if word not in STOPWORDS]
     return words
@@ -78,7 +75,6 @@ def test():
         print(clean_tweets[i])
         print(''.join(str(exists) for exists in instances[i]))
         print()
-
 
 
 if __name__ == '__main__':
