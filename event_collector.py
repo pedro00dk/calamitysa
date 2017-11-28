@@ -38,7 +38,7 @@ on_some_collected=None, verbose=False):
 
         tweets.extend(current_day_tweets)
         if on_some_collected is not None:
-            on_some_collected(tweets)
+            on_some_collected(current_day_tweets)
 
         current_date = next_date
 
