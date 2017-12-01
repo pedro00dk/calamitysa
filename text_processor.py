@@ -15,37 +15,46 @@ STOPWORDS = {word for word in nltk.corpus.stopwords.words('english')}
 STEMMER = nltk.stem.PorterStemmer()
 
 
-def clean_text(text):
+def wipe_doc(doc):
     """
-    Transform all numbers in the ' NUM ' text, removes non letters characters, stopwords, apply
-    stemming in all restant words.
+    Wipes the received document string, removing non letters characters and stopwords, transforms
+    numbers in 'NUM' str and applies stemming in remaining words.
     """
-    text = RE_NUMBERS.sub(' NUM ', text)
-    text = RE_NOT_LETTERS.sub(' ', text)
-    text = RE_SPACES.sub(' ', text)
-    words = text.lower().strip().split(' ')
+    doc = RE_NUMBERS.sub(' NUM ', doc)
+    doc = RE_NOT_LETTERS.sub(' ', doc)
+    doc = RE_SPACES.sub(' ', doc)
+    words = doc.lower().strip().split(' ')
     words = [STEMMER.stem(word) for word in words if word not in STOPWORDS]
     return words
 
 
-def build_vocabulary(words_list):
+def generate_vocabulary(wiped_corpus):
     """
-    Builds the indexed vocabulary of the received words list.
+    Creates the indexed vocabulary of the received corpus.
     """
-    words_set = {word for words in words_list for word in words}
-    words_index = {word: index for index, word in enumerate(words_set)}
-    return words_index
+    words = {word for doc in wiped_corpus for word in doc}
+    vocabulary = {word: i for i, word in enumerate(words)}
+    return vocabulary
 
 
-def build_instance(words, vocabulary):
+def build_instance(wiped_doc, vocabulary):
     """
-    Creates the instance of the received words based in the vocabulary.
+    Builds the numpy instance of the doc based on the vocabulary.
     """
-    instance = [0] * len(vocabulary)
-    for word in words:
+    instance = np.zeros(len(vocabulary), dtype=np.int8)
+    for word in wiped_doc:
         if word in vocabulary:
             instance[vocabulary[word]] = 1
     return instance
+
+
+def corpus_to_instances(corpus):
+    """
+    Generates numpy instances for corpus documents.
+    """
+    wiped_corpus = [wipe_doc(doc) for doc in corpus]
+    vocabulary = generate_vocabulary(wiped_corpus)
+    return [build_instance(wiped_doc, vocabulary) for wiped_doc in wiped_corpus]
 
 
 def test():
@@ -66,9 +75,9 @@ def test():
         "Adults set to step out in 'Dance Found' at Ballet Nouveau Colorado in Broomfield - http:// bit.ly/MJ7WwD #Broomfield #Colorado",
         "I'm at Yard House (Lone Tree, Co ) http:// 4sq.com/Lt41mS"]
 
-    clean_tweets = [clean_text(tweet) for tweet in tweets]
-    vocabulary = build_vocabulary(clean_tweets)
-    instances = [build_instance(clean_tweet, vocabulary) for clean_tweet in clean_tweets]
+    wiped_tweets = [wipe_doc(tweet) for tweet in tweets]
+    vocabulary = generate_vocabulary(wiped_tweets)
+    instances = [build_instance(clean_tweet, vocabulary) for clean_tweet in wiped_tweets]
 
     # print(f'vocabulary size: {len(vocabulary)}')
     print()
@@ -76,9 +85,12 @@ def test():
     print('tweet - clean - instance | comparison')
     for i in range(len(tweets)):
         print(tweets[i])
-        print(clean_tweets[i])
+        print(wiped_tweets[i])
         print(''.join(str(exists) for exists in instances[i]))
         print()
+
+    print('running with all in one method')
+    print(corpus_to_instances(tweets))
 
 def test_2():
     rows = []
@@ -91,9 +103,9 @@ def test_2():
     tweets = []
     for row in rows:
         if len(row) == 3:
-            tweets += [[row[0], ' '.join(clean_text(row[1])), row[2].replace('\r\n','')]]
+            tweets += [[row[0], ' '.join(wipe_doc(row[1])), row[2].replace('\r\n','')]]
         elif len(row) == 2:
-            tweets += [[row[0], ' '.join(clean_text(row[1]))]]
+            tweets += [[row[0], ' '.join(wipe_doc(row[1]))]]
         else:
             tweets += [[row[0], '']]
     # tweets_text = [tweet[1] for tweet in tweets]
@@ -127,5 +139,5 @@ def test_2():
     print('acc: ' + str(acc))
 
 if __name__ == '__main__':
-    # test()
-    test_2()
+    test()
+    # test_2()
