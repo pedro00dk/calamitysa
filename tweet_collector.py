@@ -1,3 +1,4 @@
+import csv
 import datetime
 import json
 import re
@@ -7,7 +8,10 @@ import urllib.error
 import urllib.parse
 import http.cookiejar
 
+from dateutil.relativedelta import relativedelta
 from pyquery import PyQuery
+
+from tweet_collector import *
 
 
 class Tweet:
@@ -157,13 +161,62 @@ class TweetAdvancedQuery:
         return dataJson
 
 
+def collect_event_tweets(since, until, results_per_day=1000, location=None, location_radius=None,
+                         on_some_collected=None, verbose=False):
+    """
+    Helps the tweet collect by getting they per day in a received time interval.
+    """
+    if verbose:
+        print('collecting tweets of event per day')
+
+    tweets = []
+    current_date = datetime.date(*(int(i) for i in since.split('-')))
+    until_date = datetime.date(*(int(i) for i in until.split('-')))
+
+    while current_date != until_date:
+        next_date = current_date + relativedelta(days=1)
+        if verbose:
+            print(f'current day: {str(current_date)}')
+
+        args = QueryArgs(
+            results=results_per_day,
+            location=location,
+            location_radius=location_radius,
+            since=str(current_date),
+            until=str(next_date))
+
+        try:
+            current_day_tweets = TweetAdvancedQuery().query(args, verbose=verbose)
+        except ConnectionError as e:
+            print(e)
+            print(f'error while collecting tweets of day {current_date}')
+            continue
+
+        tweets.extend(current_day_tweets)
+        if on_some_collected is not None:
+            on_some_collected(current_day_tweets)
+
+        current_date = next_date
+
+    return tweets
+
+
 def test():
     '''
     Tests the current file elements.
     '''
     print(f'testing {__file__}')
+    print('Testing TweetAdvancedQuery class')
     args = QueryArgs(query='christmas', results=50, since='2016-12-01', until='2017-01-01')
     tweets = TweetAdvancedQuery().query(args, verbose=True)
+    print('finished')
+
+    print('Testing collect_event_tweets method')
+    tweets = collect_event_tweets(results_per_day=30, since='2012-07-18', until='2012-07-23', location='Denver, CO',
+                                  location_radius=200, verbose=True)
+    print('tweets texts:')
+    for tweet in tweets:
+        print(tweet.text)
     print('finished')
 
 

@@ -3,7 +3,7 @@ import os
 import text_processor
 
 from datetime import datetime
-from event_collector import collect_event_tweets
+from tweet_collector import collect_event_tweets
 from sklearn.naive_bayes import MultinomialNB
 
 
