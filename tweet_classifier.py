@@ -1,7 +1,9 @@
+import nltk
 import re
 
-import nltk
 import numpy as np
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
@@ -14,7 +16,7 @@ STOPWORDS = {word for word in nltk.corpus.stopwords.words('english')}
 STEM = nltk.stem.PorterStemmer()
 
 
-def train_classify_database(tweets_data, verbose=False):
+def classify_tweet_database(tweets_data, verbose=False):
     """
     Trains and classifies a tweet database, the database consists of a list of triples. Triples are composed by the
     tweet date, text and class, if the class is None, the tweet is not classified. The used classifier is a Multinomial
@@ -84,3 +86,11 @@ def train_classify_database(tweets_data, verbose=False):
     tweets_classes = best_classifier.predict(tweets_instances)
 
     return [tweets_classes[i] for i in range(len(processed_tweets_data))], best_classifier
+
+
+def analyse_tweet_database(tweets_data):
+    sid = SentimentIntensityAnalyzer()
+    polarity_scores = []
+    for tweet_data in tweets_data:
+        polarity_scores.append(sid.polarity_scores(tweet_data[1]))
+    return polarity_scores

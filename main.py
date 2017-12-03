@@ -2,7 +2,7 @@ import csv
 import os
 from datetime import datetime
 
-from tweet_classifier import train_classify_database
+from tweet_classifier import analyse_tweet_database, classify_tweet_database
 from tweet_collector import collect_event_tweets
 
 DATABASE_PATH = './database/'
@@ -41,5 +41,7 @@ def load_tweets_file(filename):
 # collect_save_tweets('aurora.csv', '2012-07-19', '2012-08-19', 5000, 'Denver, CO', location_radius=200)
 saved_tweets = load_tweets_file('aurora.csv')
 
-saved_tweets_classes, classifier = train_classify_database(saved_tweets, verbose=True)
+saved_tweets_classes, classifier = classify_tweet_database(saved_tweets, verbose=True)
+saved_tweets_sentiments = analyse_tweet_database(saved_tweets)
 print(saved_tweets_classes)
+print(saved_tweets_sentiments)
