@@ -4,6 +4,7 @@ from datetime import datetime
 
 from tweet_classifier import analyse_tweet_database, classify_tweet_database
 from tweet_collector import collect_event_tweets
+from tweet_plot import plot_tweets_per_day
 
 DATABASE_PATH = './database/'
 
@@ -40,6 +41,8 @@ def load_tweets_file(filename):
 
 # collect_save_tweets('aurora.csv', '2012-07-19', '2012-08-19', 5000, 'Denver, CO', location_radius=200)
 saved_tweets = load_tweets_file('aurora.csv')
+
+plot_tweets_per_day(saved_tweets)
 
 saved_tweets_classes, classifier = classify_tweet_database(saved_tweets, verbose=True)
 saved_tweets_sentiments = analyse_tweet_database(saved_tweets)
