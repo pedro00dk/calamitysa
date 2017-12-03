@@ -23,18 +23,25 @@ def train_classify_database(tweets_data, verbose=False):
     This method returns a list of classes of all tweets (including the already classified tweets) and the best
     classifier of the cross validation.
     """
-    classified = [tweet_data for tweet_data in tweets_data if tweet_data[2] is not None]
+    processed_tweets_data = []
+    for tweet_data in tweets_data:
+        tokens = RE_SPACES.split(RE_NOT_LETTERS.sub(' ', RE_NUMBERS.sub(' num ', tweet_data[1])))
+        processed_tokens = [STEM.stem(token) for token in tokens if token not in STOPWORDS]
+        wiped_text = ' '.join(processed_tokens)
+        processed_tweets_data.append((tweet_data[0], wiped_text, tweet_data[2]))
+
+    classified = [tweet_data for tweet_data in processed_tweets_data if tweet_data[2] is not None]
     if verbose:
         print(f'classified tweets: {len(classified)}')
 
     classified_texts = [tweet_data[1] for tweet_data in classified]
-    tweet_vectorizer = CountVectorizer(strip_accents='ascii', stop_words='english')
+    tweet_vectorizer = CountVectorizer()
     tweet_vectorizer.fit(classified_texts)
 
-    instances = tweet_vectorizer.transform(classified_texts)
-    classes = np.array([tweet_data[2] for tweet_data in classified])
+    classified_instances = tweet_vectorizer.transform(classified_texts)
+    classified_classes = np.array([tweet_data[2] for tweet_data in classified])
     if verbose:
-        print(f'instance size: {instances.shape}')
+        print(f'instance size: {classified_instances.shape}')
 
     folds = 5
     skf = StratifiedKFold(n_splits=folds, shuffle=True)
@@ -43,18 +50,18 @@ def train_classify_database(tweets_data, verbose=False):
 
     best_classifier = None
     best_classifier_score = 0
-    for i, (train_indices, test_indices) in enumerate(skf.split(instances, classes)):
+    for i, (train_indices, test_indices) in enumerate(skf.split(classified_instances, classified_classes)):
 
         if verbose:
             print(f'fold {i}')
 
         classifier = MultinomialNB()
 
-        train_instances = instances[train_indices]
-        train_classes = classes[train_indices]
+        train_instances = classified_instances[train_indices]
+        train_classes = classified_classes[train_indices]
 
-        test_instances = instances[test_indices]
-        test_classes = classes[test_indices]
+        test_instances = classified_instances[test_indices]
+        test_classes = classified_classes[test_indices]
 
         classifier.fit(train_instances, train_classes)
         score = classifier.score(test_instances, test_classes)
@@ -72,8 +79,8 @@ def train_classify_database(tweets_data, verbose=False):
     if verbose:
         print('classify all tweets with best classifier')
 
-    tweets_texts = [tweet_data[1] for tweet_data in tweets_data]
+    tweets_texts = [tweet_data[1] for tweet_data in processed_tweets_data]
     tweets_instances = tweet_vectorizer.transform(tweets_texts)
     tweets_classes = best_classifier.predict(tweets_instances)
 
-    return [tweets_classes[i] for i in range(len(tweets_data))], best_classifier
+    return [tweets_classes[i] for i in range(len(processed_tweets_data))], best_classifier
