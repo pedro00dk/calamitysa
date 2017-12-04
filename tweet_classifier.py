@@ -1,12 +1,13 @@
-import nltk
 import re
 
+import nltk
 import numpy as np
-
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
+# from sklearn.svm import SVC
+# from sklearn.neural_network import MLPClassifier
 
 RE_NUMBERS = re.compile(r'[0-9]+')
 RE_NOT_LETTERS = re.compile(r'[^a-zA-Z]+')
@@ -25,6 +26,7 @@ def classify_tweet_database(tweets_data, verbose=False):
     This method returns a list of classes of all tweets (including the already classified tweets) and the best
     classifier of the cross validation.
     """
+    print('start text processing')
     processed_tweets_data = []
     for tweet_data in tweets_data:
         tokens = RE_SPACES.split(RE_NOT_LETTERS.sub(' ', RE_NUMBERS.sub(' num ', tweet_data[1])))
@@ -58,6 +60,8 @@ def classify_tweet_database(tweets_data, verbose=False):
             print(f'fold {i}')
 
         classifier = MultinomialNB()
+        # classifier = SVC()
+        # classifier = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=2000, validation_fraction=1 / (folds - 1))
 
         train_instances = classified_instances[train_indices]
         train_classes = classified_classes[train_indices]
