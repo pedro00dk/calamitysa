@@ -30,7 +30,7 @@ def plot_collected_tweets_per_day(tweets_data):
     plt.show()
 
 
-def plot_tweets_classes_per_day(tweets_data, tweets_classes):
+def plot_tweets_classes_per_day(tweets_data, tweets_classes, class_labels=None):
     """
     Plots the tweets classes per day in the database.
     """
@@ -50,7 +50,8 @@ def plot_tweets_classes_per_day(tweets_data, tweets_classes):
     indices = np.arange(len(sorted_dates_classes))
 
     for clazz in sorted(classes):
-        plt.bar(indices, [classes[clazz] for date, classes in sorted_dates_classes], label=clazz)
+        class_label = class_labels[clazz] if class_labels is not None else clazz
+        plt.bar(indices, [classes[clazz] for date, classes in sorted_dates_classes], label=class_label)
 
     plt.xlabel('Days')
     plt.ylabel('Tweets')
