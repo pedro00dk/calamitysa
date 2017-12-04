@@ -6,6 +6,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
+
 # from sklearn.svm import SVC
 # from sklearn.neural_network import MLPClassifier
 
@@ -93,6 +94,7 @@ def classify_tweet_database(tweets_data, verbose=False):
 
 
 def analyse_tweet_database(tweets_data):
+    print('analysing tweet sentiment')
     sid = SentimentIntensityAnalyzer()
     polarity_scores = []
     for tweet_data in tweets_data:
