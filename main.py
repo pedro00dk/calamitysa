@@ -43,18 +43,8 @@ def load_tweets_file(filename):
     return tweets
 
 
-# saved_tweets = load_tweets_file('aurora.csv')
-# saved_tweets_classes, classifier = classify_tweet_database(saved_tweets, verbose=True)
-# saved_tweets_sentiments = analyse_tweet_database(saved_tweets)
-#
-# plot_collected_tweets_per_day(saved_tweets)
-# plot_tweets_classes_per_day(saved_tweets, saved_tweets_classes, {'0': 'other tweets', '1': 'theater shooting'})
-# plot_tweets_sentiment_per_day(saved_tweets, saved_tweets_sentiments)
-# plot_tweets_class_sentiment_per_day(saved_tweets, saved_tweets_classes, saved_tweets_sentiments,
-#                                     {'0': 'other tweets', '1': 'theater shooting'})
-
-
-saved_tweets = load_tweets_file('london_bridge.csv')
+saved_tweets = load_tweets_file('aurora.csv')
+# saved_tweets = load_tweets_file('london_bridge.csv')
 saved_tweets_classes, classifier = classify_tweet_database(saved_tweets, verbose=True)
 saved_tweets_sentiments = analyse_tweet_database(saved_tweets)
 

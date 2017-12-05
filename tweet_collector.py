@@ -11,8 +11,6 @@ import http.cookiejar
 from dateutil.relativedelta import relativedelta
 from pyquery import PyQuery
 
-from tweet_collector import *
-
 
 class Tweet:
     """
@@ -146,7 +144,7 @@ class TweetAdvancedQuery:
         if proxy:
             opener = urllib.request.build_opener(
                 urllib.request.ProxyHandler({'http': proxy, 'https': proxy}),
-                urllib2.HTTPCookieProcessor(cookie_jar))
+                urllib.request.HTTPCookieProcessor(cookie_jar))
         else:
             opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cookie_jar))
         opener.addheaders = headers
@@ -202,9 +200,9 @@ def collect_event_tweets(since, until, results_per_day=1000, location=None, loca
 
 
 def test():
-    '''
+    """
     Tests the current file elements.
-    '''
+    """
     print(f'testing {__file__}')
     print('Testing TweetAdvancedQuery class')
     args = QueryArgs(query='christmas', results=50, since='2016-12-01', until='2017-01-01')
@@ -212,7 +210,7 @@ def test():
     print('finished')
 
     print('Testing collect_event_tweets method')
-    tweets = collect_event_tweets(results_per_day=30, since='2012-07-18', until='2012-07-23', location='Denver, CO',
+    tweets = collect_event_tweets(results_per_day=30, since='2017-07-18', until='2017-07-23', location='Denver, CO',
                                   location_radius=200, verbose=True)
     print('tweets texts:')
     for tweet in tweets:

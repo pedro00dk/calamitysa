@@ -7,6 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
 
+from sklearn.metrics import precision_recall_fscore_support
 # from sklearn.svm import SVC
 # from sklearn.neural_network import MLPClassifier
 
@@ -72,6 +73,11 @@ def classify_tweet_database(tweets_data, verbose=False):
 
         classifier.fit(train_instances, train_classes)
         score = classifier.score(test_instances, test_classes)
+
+        test_classes_pred = classifier.predict(test_instances)
+
+        prfs = precision_recall_fscore_support(test_classes, test_classes_pred, average='macro')
+        print('p r f s  ' + str(prfs))
 
         if verbose:
             print(f'score: {score}')
